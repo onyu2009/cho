@@ -1,0 +1,417 @@
+/* 사용자 요청 색상: 토스 블루 계열 (#3182F6) */
+:root {
+    --main-color: #3182F6; /* 토스 블루 */
+    --accent-color: #ff5722; /* 강조 색상 (주황) */
+    --dark-text: #222;
+    --light-bg: #f8f8f8; /* 토스 배경색 */
+}
+
+/* 폰트 적용 및 기본 스타일 리셋 */
+body {
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--light-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-size: 14px;
+    color: var(--dark-text);
+}
+
+/* 📱 휴대폰 프레임 스타일 */
+#phone-frame {
+    width: 375px; 
+    height: 720px; /* FIX: 높이를 720px로 축소 */
+    background-color: white;
+    
+    border: 3px solid #ccc; 
+    border-radius: 36px; 
+    
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); 
+    overflow: hidden; 
+    
+    /* 중요: 세로 정렬을 위한 Flex 설정 */
+    display: flex;
+    flex-direction: column; 
+    position: relative; 
+}
+
+/* 상단 헤더 스타일 */
+header {
+    background-color: white;
+    color: var(--dark-text);
+    text-align: center;
+    padding: 15px 0;
+    font-size: 16px;
+    font-weight: 700;
+    border-bottom: 1px solid #eee;
+    position: relative; 
+}
+
+/* 메인 콘텐츠 영역 (스크롤 가능) */
+#main-content-area {
+    flex-grow: 1; /* 남은 공간 모두 차지 */
+    position: relative;
+    overflow: hidden; /* 서브 화면 전환 시 overflow 숨김 */
+}
+
+/* 탭 네비게이션 스타일 (하단으로 이동) */
+.tab-nav {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #f0f0f0; /* 상단 구분선 */
+    background-color: white;
+    padding-bottom: 5px; /* 하단 여백 */
+}
+
+.tab-button {
+    flex-grow: 1;
+    padding: 12px 5px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    color: #888;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.tab-button.active {
+    color: var(--main-color);
+    font-weight: 700; 
+}
+
+
+/* 메인 탭 내용 스타일 */
+.main-tab-content {
+    height: 100%;
+    overflow-y: auto; /* 탭 내용만 스크롤 가능 */
+    background-color: var(--light-bg);
+    display: none; 
+}
+
+.main-tab-content.active {
+    display: block; 
+}
+
+
+/* --- N빵 결제 서브 화면 전환 스타일 --- */
+.sub-screen {
+    /* 서브 스크린이 메인 탭 콘텐츠 전체를 덮도록 설정 */
+    padding: 15px; 
+    background-color: var(--light-bg);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    transition: transform 0.3s ease-out; /* 화면 전환 애니메이션 */
+    transform: translateX(100%); /* 기본적으로 오른쪽 밖으로 치워둠 */
+    box-sizing: border-box;
+}
+
+#coorder-input {
+    transform: translateX(0); /* 기본 화면은 보이도록 설정 */
+    padding-top: 10px; /* FIX: 상단 공백을 줄이기 위해 조정 */
+    z-index: 2;
+}
+
+#coorder-payment-detail {
+    z-index: 3;
+    background-color: white; 
+}
+
+#coorder-payment-detail.active {
+    transform: translateX(0); /* 활성화 시 오른쪽에서 슬라이드 인 */
+}
+
+
+.section-title {
+    color: var(--dark-text);
+    font-size: 20px;
+    font-weight: 800; 
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+/* 카드 박스 스타일 (토스 디자인 핵심) */
+.card-box {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); 
+}
+
+/* 입력 필드 그룹 */
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0; 
+}
+.input-group.last-input {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.input-group label {
+    font-weight: 600;
+    color: #555;
+}
+.input-group input[type="number"], .input-group select {
+    width: 120px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    text-align: right;
+    font-size: 14px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* 결과 표시 영역 */
+.result-area {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+.result-area p {
+    margin: 5px 0;
+    font-size: 15px;
+}
+.final-result {
+    font-size: 32px; 
+    font-weight: 800;
+    color: var(--dark-text);
+}
+.split-price {
+    color: var(--main-color); 
+}
+
+/* 버튼 스타일 (메인 버튼) */
+button {
+    background-color: var(--main-color);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 10px; 
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 20px;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #276cd8;
+}
+
+.small-text {
+    font-size: 11px;
+    color: #888;
+    text-align: center;
+    margin-top: 15px;
+}
+
+
+/* --- 결제 상세 화면 (coorder-payment-detail) 스타일 --- */
+
+/* 뒤로가기 버튼 */
+.back-button {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: auto;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: transparent;
+    color: var(--dark-text);
+    border: none;
+    border-radius: 8px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.payment-detail-box {
+    margin-top: 50px; /* 뒤로가기 버튼 공간 확보 */
+    padding: 0 15px;
+    text-align: center;
+}
+
+.detail-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 40px;
+}
+
+.modal-label {
+    font-size: 15px;
+    color: #888;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+.modal-total-price {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--dark-text);
+}
+
+.split-info-card {
+    background-color: var(--light-bg);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 30px 0;
+}
+
+.modal-split-price {
+    font-size: 40px; 
+    font-weight: 800;
+    color: var(--main-color); 
+}
+
+.transfer-info {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f6f6f6;
+    border-radius: 10px;
+    font-size: 13px;
+    text-align: left;
+}
+.transfer-info p {
+    margin: 5px 0;
+}
+
+.transfer-button {
+    width: 100%;
+    margin: 30px 0 20px 0;
+    padding: 18px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+/* --- 기타 탭 스타일 --- */
+.write-box {
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.input-field, .textarea-field {
+    width: 100%; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+    box-sizing: border-box; 
+    border: 1px solid #eee;
+    border-radius: 6px;
+}
+.textarea-field {
+    height: 70px;
+    resize: none; 
+}
+.post-button {
+    background-color: var(--accent-color);
+    color: white;
+}
+.post-button:hover {
+    background-color: #e54c1c;
+}
+.pot-item {
+    padding: 15px;
+    margin-top: 15px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.pot-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 5px;
+}
+.pot-meta {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 10px;
+}
+.comment-section {
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px solid #f0f0f0;
+}
+.comment-input-group {
+    display: flex;
+    margin-top: 10px;
+}
+.comment-input {
+    flex-grow: 1;
+    padding: 5px 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px 0 0 6px;
+    font-size: 13px;
+}
+.comment-button {
+    width: 25%;
+    padding: 5px;
+    font-size: 12px;
+    background-color: #444;
+    color: white;
+    margin: 0;
+    border-radius: 0 6px 6px 0;
+}
+.comment-button:hover {
+    background-color: #333;
+}
+.event-info-box {
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.event-button {
+    margin-bottom: 10px;
+    background-color: var(--dark-text); 
+    color: white;
+}
+.event-button.nonsuccess {
+    background-color: #ccc !important;
+    color: #777 !important;
+    cursor: not-allowed;
+}
+.game-box {
+    padding: 20px;
+    text-align: center;
+}
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+.game-data {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--accent-color);
+}
+.start-button, #click-btn {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 15px;
+    font-size: 16px;
+}
+.start-button:hover, #click-btn:hover {
+    background-color: #e54c1c;
+}
+.game-feedback {
+    margin-top: 15px;
+    font-weight: 500;
+}

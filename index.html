@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배달 플랫폼 기능 시연</title>
+</head>
+<body>
+
+    <div id="phone-frame">
+        
+        <header>
+            <span id="header-title">배달 플랫폼</span> 
+        </header>
+
+        <div id="main-content-area">
+            
+            <div id="coorder" class="main-tab-content active"> 
+                
+                <div id="coorder-input" class="sub-screen active">
+                    <h2 class="section-title">N빵 (결제 금액 자동 분할)</h2>
+                    
+                    <div class="card-box">
+                        <div class="input-group">
+                            <label for="food-select">🍽️ 주문할 메뉴 선택:</label>
+                            <select id="food-select" onchange="calculate()">
+                                <option value="18000">🍗 치킨</option>
+                                <option value="21900">🍕 피자</option>
+                                <option value="12000">🍔 버거 세트</option>
+                                <option value="30000">🍣 프리미엄 초밥</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="chicken-qty">📦 주문 수량:</label>
+                            <input type="number" id="chicken-qty" value="1" min="1" oninput="calculate()">
+                        </div>
+                        <div class="input-group last-input">
+                            <label for="split-members">👨‍👩‍👧‍👦 분할 참여 인원:</label>
+                            <input type="number" id="split-members" value="2" min="1" oninput="calculate()">
+                        </div>
+                    </div>
+
+                    <div class="result-area">
+                        <p>총 주문 금액:</p>
+                        <p class="final-result"><span id="total-price">0</span> 원</p>
+                        <p>1인당 분담 금액:</p>
+                        <p class="final-result split-price"><span id="split-price">0</span> 원</p>
+                        <button onclick="openPaymentDetailScreen()">정산하기</button> 
+                    </div>
+                    <p class="small-text">※ 배달비가 포함된 총 금액을 기준으로 자동 분할됩니다.</p>
+                </div>
+                
+                <div id="coorder-payment-detail" class="sub-screen">
+                    <button class="back-button" onclick="closePaymentDetailScreen()">&#10094; 뒤로</button>
+                    
+                    <div class="payment-detail-box">
+                        <h3 class="detail-title">N빵 정산 요청서</h3>
+                        <p class="modal-label">총 주문 금액</p>
+                        <p class="modal-total-price" id="detail-total-price">0 원</p>
+                        
+                        <div class="split-info-card">
+                             <p class="modal-label">나눠 낼 금액 (분할 참여 인원: <span id="detail-members">0</span>명)</p>
+                             <p class="modal-split-price" id="detail-split-price">0 원</p>
+                        </div>
+                        
+                        <div class="transfer-info">
+                            <p>받을 계좌: **홍길동 토스 계좌**</p>
+                            <p>정산 요청 대상: <span id="detail-member-count">2명</span>에게 자동 송금 요청</p>
+                        </div>
+
+                        <button class="transfer-button" onclick="finalizePayment()">
+                            2명에게 송금 요청하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="community" class="main-tab-content">
+                <h2 class="section-title">배달 팟 모집</h2>
+                
+                <div class="write-box card-box">
+                    <h4 style="margin-top: 0;">+ 새 팟 모집 글 작성</h4>
+                    <input type="text" id="new-pot-title" placeholder="팟 이름 (예: 6시 치킨 픽업팟)" class="input-field">
+                    <textarea id="new-pot-content" placeholder="상세 내용 및 픽업 장소(편의점) 설명" class="textarea-field"></textarea>
+                    <button onclick="postPot()" class="post-button">글 올리기</button>
+                </div>
+
+                <div id="pot-list">
+                </div>
+                <p class="small-text" style="margin-top: 20px;">※ 최소 주문 금액 및 배달비 부담을 동시에 줄입니다.</p>
+            </div>
+
+            <div id="event" class="main-tab-content">
+                <h2 class="section-title">오늘의 리워드 이벤트</h2>
+                <div class="event-info-box card-box">
+                    <p>현재 보유 쿠폰: <span id="coupon-count" class="result-value">3</span>장</p>
+                    <button onclick="runEvent('attendance')" class="event-button attendance">✅ 출석 체크 (쿠폰 1장 지급)</button>
+                    <button onclick="runEvent('nonsuccess')" class="event-button nonsuccess">⏳ 비수요 시간 쿠폰 받기</button>
+                </div>
+                
+                <div class="game-box card-box">
+                    <h3>🔴 10초 클릭 챌린지 (미니 게임)</h3>
+                    <div class="game-stats">
+                        <span>남은 시간: <span id="game-timer" class="game-data">0</span>초</span>
+                        <span>내 클릭: <span id="click-count" class="game-data">0</span>회</span>
+                    </div>
+                    <button id="start-game-btn" onclick="startGame()" class="start-button">▶ 게임 시작</button>
+                    <button id="click-btn" onclick="increaseClick()" disabled style="display: none;">💥 빠르게 클릭!</button>
+                    <p id="game-message" class="game-feedback small-text">게임을 시작해주세요.</p>
+                </div>
+            </div>
+
+        </div> <div class="tab-nav bottom-nav">
+            <button class="tab-button active" data-tab="coorder" onclick="openTab('coorder')">
+                💰 N빵 결제
+            </button>
+            <button class="tab-button" data-tab="community" onclick="openTab('community')">
+                🤝 같이 주문
+            </button>
+            <button class="tab-button" data-tab="event" onclick="openTab('event')">
+                🎲 리워드
+            </button>
+        </div>
+        
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
